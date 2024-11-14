@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AliExpress Custom Search
+// @name         AliExpress Custom Search with Orders and Cart
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Add custom search bar to AliExpress
+// @version      0.2
+// @description  Add custom search bar to AliExpress with links to Orders and Cart
 // @match        https://www.aliexpress.com/*
 // @grant        none
 // ==/UserScript==
@@ -22,6 +22,7 @@
             padding: 10px;
             display: flex;
             justify-content: center;
+            align-items: center;
             position: fixed;
             top: 0;
             left: 0;
@@ -44,7 +45,11 @@
             background-color: #fff;
             border: none;
             cursor: pointer;
+            margin-right: 10px;
         `;
+
+        const ordersLink = createLink('Orders', 'https://www.aliexpress.com/p/order/index.html');
+        const cartLink = createLink('Cart', 'https://www.aliexpress.com/p/shoppingcart/index.html');
 
         button.addEventListener('click', performSearch);
         input.addEventListener('keypress', function(e) {
@@ -55,9 +60,24 @@
 
         searchBar.appendChild(input);
         searchBar.appendChild(button);
+        searchBar.appendChild(ordersLink);
+        searchBar.appendChild(cartLink);
 
         document.body.insertBefore(searchBar, document.body.firstChild);
         document.body.style.marginTop = '50px';
+    }
+
+    function createLink(text, href) {
+        const link = document.createElement('a');
+        link.textContent = text;
+        link.href = href;
+        link.style.cssText = `
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+            font-weight: bold;
+        `;
+        return link;
     }
 
     function performSearch() {
