@@ -32,7 +32,8 @@
         const links = [
             { text: 'Root', url: rootUrl },
             { text: 'Branches', url: `${rootUrl}/branches` },
-            { text: 'Pulls', url: `${rootUrl}/pulls` }
+            { text: 'Pulls', url: `${rootUrl}/pulls` },
+            { text: 'Prs-need-me', url: `${rootUrl}/pulls/review-requested/@me` }
         ];
 
         links.forEach(link => {
