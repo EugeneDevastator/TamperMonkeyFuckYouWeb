@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0.5
 // @description  Copy YouTube video transcripts with timestamps
-// @author       You
+// @author       DaveAstator and Claude Sonnet
 // @match        https://www.youtube.com/watch*
 // @grant        GM_setClipboard
 // @license MIT
@@ -68,23 +68,32 @@
                 // Select the transcript panel using the 'target-id' attribute
                 const transcriptPanel = document.querySelector('ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-searchable-transcript"]');
 
-                if (transcriptPanel && transcriptPanel.innerText.trim() !== '') {
-                    clearInterval(checkTranscriptVisible);
-                    console.log('Transcript panel found and loaded:', transcriptPanel); // Log the visibility and loading of the transcript panel
+                if (transcriptPanel) {
+                    // Look for the actual transcript content container
+                    const transcriptContent = transcriptPanel.querySelector('ytd-transcript-segment-list-renderer');
 
-                    // Copy the transcript text to clipboard
-                    GM_setClipboard(transcriptPanel.innerText, 'text');
-                    console.log('Transcript copied to clipboard.'); // Log the copying of the transcript to the clipboard
+                    if (transcriptContent && transcriptContent.querySelectorAll('ytd-transcript-segment-renderer').length > 1) {
+                        clearInterval(checkTranscriptVisible);
+                        console.log('Transcript content fully loaded:', transcriptContent);
 
-                    // Show notification
-                    alert('Transcript copied to clipboard!');
+                        // Wait a bit more to ensure all segments are loaded
+                        setTimeout(() => {
+                            // Copy the transcript text to clipboard
+                            GM_setClipboard(transcriptPanel.innerText, 'text');
+                            console.log('Transcript copied to clipboard.');
+
+                            // Show notification
+                            alert('Transcript copied to clipboard!');
+                        }, 500);
+                    } else {
+                        console.log('Transcript panel found but content still loading...');
+                    }
                 } else {
-                    console.log('Waiting for transcript panel to load...'); // Log the waiting for the transcript panel to load
+                    console.log('Waiting for transcript panel to appear...');
                 }
             }, 500);
         });
     }
-
 
     // Insert the Copy Transcript button when the page is loaded and ready
     window.addEventListener('load', function() {
@@ -92,4 +101,3 @@
         waitForTranscriptButton();
     });
 })();
-
