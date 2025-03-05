@@ -35,6 +35,7 @@
         // Locate the "Show transcript" button
         const transcriptButtonSelector = '#primary-button > ytd-button-renderer > yt-button-shape > button';
         const showTranscriptButton = document.querySelector(transcriptButtonSelector);
+        const container = document.querySelector('#owner');
 
         // Log whether the "Show transcript" button was found
         if (showTranscriptButton) {
@@ -52,7 +53,7 @@
         console.log('Copy Transcript button created:', copyButton); // Log the creation of the button
 
         // Insert the button next to the "Show transcript" button
-        showTranscriptButton.parentNode.insertBefore(copyButton, showTranscriptButton.nextSibling);
+        container.appendChild(copyButton);
         console.log('Copy Transcript button inserted into the page.'); // Log the insertion of the button
 
         // Add click event listener to the Copy Transcript button
